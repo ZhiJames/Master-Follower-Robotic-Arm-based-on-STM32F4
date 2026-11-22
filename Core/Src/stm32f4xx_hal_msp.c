@@ -23,6 +23,7 @@
 #include "stm32f4xx_hal_gpio_ex.h"
 #include "stm32f4xx_hal_i2c.h"
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -34,10 +35,12 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN Define */
 
+
 /* USER CODE END Define */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN Macro */
+
 
 /* USER CODE END Macro */
 
@@ -82,13 +85,13 @@ void HAL_MspInit(void)
 }
 
 /* USER CODE BEGIN 1 */
-void I2C_MSP_INIT(I2C_HandleTypeDef *hi2c){
+void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c){
   if(hi2c->Instance != I2C1){
     return;
   }
 
-  _HAL_RCC_GPIOB_CLK_ENABLE();
-  _HAL_RCC_I2C1_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_I2C1_CLK_ENABLE();
 
   GPIO_InitTypeDef pins = {0};
   pins.Pin = (GPIO_PIN_6 | GPIO_PIN_7); // 6 - i2c1_scl; 7 - i2c1_sda
