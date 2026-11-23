@@ -21,8 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "i2c.h"
+#include "peripheral_init.h"
 #include "as5600.h"
+#include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
 #include <stdio.h>
 
@@ -96,6 +97,8 @@ int main(void)
   if(HAL_I2C_IsDeviceReady(&i2c1, 0x36u << 1, 3, 100) != HAL_OK){
     Error_Handler();
   }
+  UART2_Init();
+  printf("UART Ready\r\n");
 
   as5600_init(&i2c1);
 
@@ -105,8 +108,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    AS5600_Raw_Angle(&angle);
-    printf("AS5600 Raw Angle: %u/r/n", angle);
+
+    if(AS5600_Raw_Angle(&angle) == HAL_OK){
+      printf("AS5600 Raw Angle: %u\r\n", angle);
+    }
+    HAL_Delay(100);
+    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

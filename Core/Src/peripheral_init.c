@@ -1,12 +1,13 @@
 #include "peripheral_init.h"
-#include "i2c.h"
 #include "main.h"
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_i2c.h"
 #include "stm32f4xx_hal_uart.h"
+#include <stdio.h>
 
 I2C_HandleTypeDef i2c1;
 UART_HandleTypeDef uart2;
+
 
 void I2C1_Init(void){
     i2c1.Instance = I2C1;
@@ -38,4 +39,12 @@ void UART2_Init(void){
     if(HAL_UART_Init(&uart2) != HAL_OK){
         Error_Handler();
     }
+}
+
+int __io_putchar(int ch){
+    uint8_t byte = (uint8_t)ch;
+    if(HAL_UART_Transmit(&uart2, &byte, 1, 100) != HAL_OK){
+        return EOF;
+    }
+    return byte;
 }

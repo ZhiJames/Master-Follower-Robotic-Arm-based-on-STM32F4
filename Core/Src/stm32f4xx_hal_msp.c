@@ -22,6 +22,8 @@
 #include "stm32f4xx_hal_gpio.h"
 #include "stm32f4xx_hal_gpio_ex.h"
 #include "stm32f4xx_hal_i2c.h"
+#include "stm32f4xx_hal_rcc.h"
+#include "stm32f4xx_hal_uart.h"
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 
@@ -100,6 +102,23 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c){
   pins.Speed = GPIO_SPEED_FREQ_LOW;
   pins.Alternate = GPIO_AF4_I2C1;
   HAL_GPIO_Init(GPIOB, &pins);
+}
+
+void HAL_UART_MspInit(UART_HandleTypeDef *huart){
+  if(huart->Instance != USART2){
+    return;
+  }
+
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_USART2_CLK_ENABLE();
+
+  GPIO_InitTypeDef pins = {0};
+  pins.Pin = GPIO_PIN_2;
+  pins.Mode = GPIO_MODE_AF_PP;
+  pins.Pull = GPIO_NOPULL;
+  pins.Speed = GPIO_SPEED_FREQ_LOW;
+  pins.Alternate = GPIO_AF7_USART2;
+  HAL_GPIO_Init(GPIOA, &pins);
 }
 
 /* USER CODE END 1 */
