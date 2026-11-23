@@ -110,7 +110,9 @@ int main(void)
   {
 
     if(AS5600_Raw_Angle(&angle) == HAL_OK){
-      printf("AS5600 Raw Angle: %u\r\n", angle);
+      uint32_t convert = (uint32_t)angle * 3600u / 4096u;
+      printf("Raw: %u  Angle: %lu.%lu  deg\r\n", 
+                (unsigned)angle, (unsigned long)(convert /10u), (unsigned long)(convert % 10u));
     }
     HAL_Delay(100);
     
