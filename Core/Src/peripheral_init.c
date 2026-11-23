@@ -1,9 +1,12 @@
+#include "peripheral_init.h"
 #include "i2c.h"
 #include "main.h"
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_i2c.h"
+#include "stm32f4xx_hal_uart.h"
 
 I2C_HandleTypeDef i2c1;
+UART_HandleTypeDef uart2;
 
 void I2C1_Init(void){
     i2c1.Instance = I2C1;
@@ -20,4 +23,19 @@ void I2C1_Init(void){
         Error_Handler();
     }
 
+}
+
+void UART2_Init(void){
+    uart2.Instance = USART2;
+    uart2.Init.BaudRate = 115200;
+    uart2.Init.WordLength = UART_WORDLENGTH_8B;
+    uart2.Init.Parity = UART_PARITY_NONE;
+    uart2.Init.StopBits = UART_STOPBITS_1;
+    uart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    uart2.Init.Mode = UART_MODE_TX;
+    uart2.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    if(HAL_UART_Init(&uart2) != HAL_OK){
+        Error_Handler();
+    }
 }

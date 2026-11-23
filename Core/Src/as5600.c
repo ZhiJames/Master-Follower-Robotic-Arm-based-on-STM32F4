@@ -12,7 +12,7 @@ void as5600_init(I2C_HandleTypeDef * hi2c){
 HAL_StatusTypeDef AS5600_Raw_Angle(uint16_t *angle){
     uint8_t data[2];
 
-    HAL_StatusTypeDef status = HAL_I2C_Mem_Read(&as5600_i2c, 
+    HAL_StatusTypeDef status = HAL_I2C_Mem_Read(as5600_i2c, 
                                                 0x36u << 1, 
                                                 0x0C, 
                                                 I2C_MEMADD_SIZE_8BIT, 
@@ -23,6 +23,8 @@ HAL_StatusTypeDef AS5600_Raw_Angle(uint16_t *angle){
     if(status == HAL_OK){
         *angle = ((uint16_t)(data[0] & 0x0Fu) << 8) | data[1];
     }
+
+    return status;
 }
 
 
