@@ -24,6 +24,7 @@
 #include "peripheral_init.h"
 #include "as5600.h"
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_i2c.h"
 #include <stdio.h>
 
@@ -94,9 +95,8 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   I2C1_Init();
-  if(HAL_I2C_IsDeviceReady(&i2c1, 0x36u << 1, 3, 100) != HAL_OK){
-    Error_Handler();
-  }
+  I2C2_Init();
+  HAL_StatusTypeDef oled_status = HAL_I2C_IsDeviceReady(&i2c2, 0x3C << 1, 3, 100);
   UART2_Init();
   printf("UART Ready\r\n");
 

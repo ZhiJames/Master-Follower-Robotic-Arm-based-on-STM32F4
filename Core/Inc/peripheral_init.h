@@ -6,9 +6,11 @@
 #include "stm32f4xx_hal_uart.h"
 
 extern I2C_HandleTypeDef i2c1;
+extern I2C_HandleTypeDef i2c2;
 extern UART_HandleTypeDef uart2;
 
 void I2C1_Init(void);
+void I2C2_Init(void);
 void UART2_Init(void);
 
 
