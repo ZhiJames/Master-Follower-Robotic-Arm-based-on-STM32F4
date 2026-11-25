@@ -88,28 +88,25 @@ void HAL_MspInit(void)
 
 /* USER CODE BEGIN 1 */
 void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c){
-  if(hi2c->Instance != I2C1){
+  GPIO_InitTypeDef pins = {0};
+  pins.Mode = GPIO_MODE_AF_OD;
+  pins.Pull = GPIO_NOPULL;
+  pins.Speed = GPIO_SPEED_FREQ_LOW;
+
+  if (hi2c->Instance == I2C1) {
+    __HAL_RCC_I2C1_CLK_ENABLE();
+    pins.Pin = GPIO_PIN_6 | GPIO_PIN_7; // PB6 SCL, PB7 SDA
+    pins.Alternate = GPIO_AF4_I2C1;
+  } else if (hi2c->Instance == I2C2) {
+    __HAL_RCC_I2C2_CLK_ENABLE();
+    pins.Pin = GPIO_PIN_10 | GPIO_PIN_3; // PB10 SCL, PB3 SDA
+    pins.Alternate = GPIO_AF4_I2C2;
+  } else {
     return;
   }
 
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_I2C1_CLK_ENABLE();
-
-  GPIO_InitTypeDef pins = {0};
-  GPIO_InitTypeDef i2c2_pins = {0};
-  pins.Pin = (GPIO_PIN_6 | GPIO_PIN_7); // 6 - i2c1_scl; 7 - i2c1_sda
-  pins.Mode = GPIO_MODE_AF_OD;
-  pins.Pull = GPIO_NOPULL;
-  pins.Speed = GPIO_SPEED_FREQ_LOW;
-  pins.Alternate = GPIO_AF4_I2C1;
   HAL_GPIO_Init(GPIOB, &pins);
-
-  pins.Pin = (GPIO_PIN_11 | GPIO_PIN_10); //GPIOB_11 = sda; GPIOB_10 = scl
-  pins.Mode = GPIO_MODE_AF_OD;
-  pins.Pull = GPIO_NOPULL;
-  pins.Speed = GPIO_SPEED_FREQ_LOW;
-  pins.Alternate = GPIO_AF4_I2C2;
-  HAL_GPIO_Init(GPIOB, &i2c2_pins);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *huart){

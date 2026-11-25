@@ -27,6 +27,7 @@
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_i2c.h"
 #include <stdio.h>
+#include "ssd1306.h"
 
 /* USER CODE END Includes */
 
@@ -95,10 +96,20 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   I2C1_Init();
-  I2C2_Init();
-  HAL_StatusTypeDef oled_status = HAL_I2C_IsDeviceReady(&i2c2, 0x3C << 1, 3, 100);
   UART2_Init();
   printf("UART Ready\r\n");
+
+  I2C2_Init();
+  HAL_StatusTypeDef oled_status = HAL_I2C_IsDeviceReady(&i2c2, 0x3C << 1, 3, 100);
+  oled_status = SSD1306_Init(&i2c2);
+  // if (oled_status == HAL_OK) {
+  //   oled_status = SSD1306_Init(&i2c2);
+  //   printf("OLED init: HAL status %d, I2C error 0x%lX\r\n",
+  //          (int)oled_status, (unsigned long)HAL_I2C_GetError(&i2c2));
+  // } else {
+  //   printf("OLED probe at 0x3C failed: HAL status %d, I2C error 0x%lX\r\n",
+  //          (int)oled_status, (unsigned long)HAL_I2C_GetError(&i2c2));
+  // }
 
   as5600_init(&i2c1);
 
@@ -111,8 +122,8 @@ int main(void)
 
     if(AS5600_Raw_Angle(&angle) == HAL_OK){
       uint32_t convert = (uint32_t)angle * 3600u / 4096u;
-      printf("Raw: %u  Angle: %lu.%lu  deg\r\n", 
-                (unsigned)angle, (unsigned long)(convert /10u), (unsigned long)(convert % 10u));
+      // printf("Raw: %u  Angle: %lu.%lu  deg\r\n", 
+      //           (unsigned)angle, (unsigned long)(convert /10u), (unsigned long)(convert % 10u));
     }
     HAL_Delay(100);
     
