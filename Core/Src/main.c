@@ -102,14 +102,8 @@ int main(void)
   I2C2_Init();
   HAL_StatusTypeDef oled_status = HAL_I2C_IsDeviceReady(&i2c2, 0x3C << 1, 3, 100);
   oled_status = SSD1306_Init(&i2c2);
-  // if (oled_status == HAL_OK) {
-  //   oled_status = SSD1306_Init(&i2c2);
-  //   printf("OLED init: HAL status %d, I2C error 0x%lX\r\n",
-  //          (int)oled_status, (unsigned long)HAL_I2C_GetError(&i2c2));
-  // } else {
-  //   printf("OLED probe at 0x3C failed: HAL status %d, I2C error 0x%lX\r\n",
-  //          (int)oled_status, (unsigned long)HAL_I2C_GetError(&i2c2));
-  // }
+  HAL_Delay(1000);
+  SSD1306_Clear();  //test clear function
 
   as5600_init(&i2c1);
 

@@ -1,12 +1,21 @@
 #include "ssd1306.h"
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_i2c.h"
+#include <string.h>
 
 //define ssd1306 address
-#define SSD1306_Addr (0x3C << 1) //0x78
+#define SSD1306_ADDR (0x3C << 1) //0x78
+#define SSD1306_WIDTH 128u
+#define SSD1306_HEIGHT 64u
 
 static I2C_HandleTypeDef *oled_bus;
+static uint8_t framebuffer[(SSD1306_WIDTH * SSD1306_HEIGHT) / 8u];
 
+
+/*
+    Initialize the SSD1306
+    Start with blank
+*/
 HAL_StatusTypeDef SSD1306_Init(I2C_HandleTypeDef *i2c2){
     uint8_t ssd1306_commands[] = {0x00,             //I2C cojtr0l byte
                                 0xAE,               //Keep display off during setup
@@ -22,11 +31,11 @@ HAL_StatusTypeDef SSD1306_Init(I2C_HandleTypeDef *i2c2){
                                 0xD9, 0xF1,   //Set the preCharge period
                                 0xDB, 0x20,   //Set the VCOMH level
                                 0x2E,              //Disable scrolling
-                                0xA4, 0xA6,   //Force all pixels on for bring-up
+                                0xA5, 0xA6,   //Force all pixels on for bring-up
                                 0xAF               //Turn the display on
     };
 
-    HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(i2c2, SSD1306_Addr, ssd1306_commands, sizeof(ssd1306_commands), 50);
+    HAL_StatusTypeDef status = HAL_I2C_Master_Transmit(i2c2, SSD1306_ADDR, ssd1306_commands, sizeof(ssd1306_commands), 50);
 
     if(status == HAL_OK){
         oled_bus = i2c2;
@@ -35,3 +44,8 @@ HAL_StatusTypeDef SSD1306_Init(I2C_HandleTypeDef *i2c2){
     return status;
 
 }
+
+void SSD1306_Clear(void){
+    memset(framebuffer, 0, sizeof(framebuffer));
+}
+

@@ -9,7 +9,7 @@
 HAL_StatusTypeDef SSD1306_Init(I2C_HandleTypeDef *i2c2);
 
 //clear
-//void SSD1306_Clear(void);
+void SSD1306_Clear(void);
 
 //draw pixel
 //void SSD1306_Draw(uint8_t x, uint8_t y);
